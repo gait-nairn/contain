@@ -31,7 +31,6 @@ class NormalizedStr:
         that can be substituted directly into the python interpreter to reproduce an equivalent object.
         '''
         return "NormalizedStr('" + str(self.text) + "', '" + str(self.normal_form) + "')"
-        
 
     def __str__(self):
         '''
@@ -86,7 +85,7 @@ class NormalizedStr:
         The addition of two normalized strings is not guaranteed to stay normalized.
         Therefore, you must renormalize the strings after adding them together.
         '''
-        new_b = unicodedata.normalize(self.normal_form, self.text+str(b))
+        new_b = unicodedata.normalize(self.normal_form, self.text + str(b))
         return NormalizedStr(new_b)
 
     def __iter__(self):
