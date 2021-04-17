@@ -129,7 +129,6 @@ class BinaryTree():
         else:
             raise ValueError('Traversal type ' + str(traversal_type) + ' does not exist.')
 
-
     def preorder(self, start, traversal):
         '''
         FIXME:
@@ -184,7 +183,7 @@ class BinaryTree():
         return the sum of these three steps
         '''
         if node:
-            result = BinaryTree.__len__helper(node,left) + 1
+            result = BinaryTree.__len__helper(node.left) + 1
             result_2 = BinaryTree.__len__helper(node.right)
             return result + result_2
         else:

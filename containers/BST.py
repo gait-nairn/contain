@@ -189,7 +189,7 @@ class BST(BinaryTree):
             raise ValueError('Error: There is nothing in the tree.')
         else:
             return BST._find_largest(self.root)
-    
+
     @staticmethod
     def _find_largest(node):
         '''
