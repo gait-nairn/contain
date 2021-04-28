@@ -1,186 +1,156 @@
 '''
-This file implements the Node and BinaryTree classes.
-These two classes are the building blocks for the BST, AVLTree, and Heap data structures.
-It is crucial to get these implemented correctly in order to be able to implement the other data structures.
+This file implements the AVL Tree data structure.
+The functions in this file are considerably harder than the functions in the BinaryTree and BST files,
+but there are fewer of them.
 '''
 
+from containers.BinaryTree import BinaryTree, Node
+from containers.BST import BST
 
-class Node():
+
+class AVLTree(BST):
     '''
-    You do not have to implement anything within this class.
-    Given a node t, you can visualize the node by running str(t) in the python interpreter.
-    This is a key method to perform debugging,
-    so you should get familiar with how to visualize these strings.
-    '''
-
-    def __init__(self, value, left=None, right=None):
-        self.value = value
-        self.left = left    # NOTE: left should always be a Node
-        self.right = right  # NOTE: right should always be a Node
-
-    def __str__(self):
-        ret = '('
-        ret += str(self.value)
-        ret += ' - '
-        if self.left:
-            ret += str(self.left)
-            ret += ' '
-        ret += '- '
-        if self.right:
-            ret += str(self.right)
-            ret += ' '
-        ret += ')'
-        return ret
-
-
-class BinaryTree():
-    '''
-    This class is relatively useless by itself,
-    but it is the superclass for the BST, AVLTree, and Heap classes,
-    and it provides important helper functions for these classes.
-    If you don't implement all of the functions in this class correctly,
-    it will be impossible to implement those other classes.
+    FIXME:
+    AVLTree is currently not a subclass of BST.
+    You should make the necessary changes in the class declaration line above
+    and in the constructor below.
     '''
 
-    def __init__(self, root=None):
-        '''
-        Construct a BinaryTree, possibly with a single element in it.
-        Note that for an ordinary BinaryTree, we cannot insert more than one element in the constructor,
-        but for the BST (and other tree types) we can.
-        '''
-        if root:
-            self.root = Node(root)
-        else:
-            self.root = None
-
-    def __str__(self):
-        '''
-        We can visualize a tree by visualizing its root node.
-        '''
-        return str(self.root)
-
-    def print_tree(self, traversal_type):
-        '''
-        There are three primary types of tree traversals: preorder, inorder, and postorder.
-        All three of these traversals are implemented for you as a reference on how to write recursive functions on recursive data structures.
-        '''
-        if traversal_type == 'preorder':
-            return self.preorder_print(self.root, '')
-        elif traversal_type == 'inorder':
-            return self.inorder_print(self.root, '')
-        elif traversal_type == 'postorder':
-            return self.postorder_print(self.root, '')
-        else:
-            raise ValueError('Traversal type ' + str(traversal_type) + ' is not supported.')
-
-    def preorder_print(self, start, traversal):
-        '''
-        Prints the nodes using a preorder traversal.
-        '''
-        if start:
-            traversal += str(start.value) + '-'
-            traversal = self.preorder_print(start.left, traversal)
-            traversal = self.preorder_print(start.right, traversal)
-        return traversal
-
-    def inorder_print(self, start, traversal):
-        '''
-        Prints the nodes using a inorder traversal.
-        '''
-        if start:
-            traversal = self.inorder_print(start.left, traversal)
-            traversal += str(start.value) + '-'
-            traversal = self.inorder_print(start.right, traversal)
-        return traversal
-
-    def postorder_print(self, start, traversal):
-        '''
-        Prints the nodes using a postorder traversal.
-        '''
-        if start:
-            traversal = self.postorder_print(start.left, traversal)
-            traversal = self.postorder_print(start.right, traversal)
-            traversal += str(start.value) + '-'
-        return traversal
-
-    def to_list(self, traversal_type):
-        '''
-        This function is similar to the print_tree function,
-        but instead of printing the tree,
-        it returns the contents of the tree as a list.
-
-        A general programming principle is that a function should return its results
-        rather than print them whenever possible.
-        If a function returns its results,
-        we can always print the returned results if we need to visualize them.
-        But by returning the results we can also do more computations on the results if needed.
-        Many of the test cases for more complicated tree functions rely on this to_list function,
-        so it is import to implement it correctly.
-
-        FIXME:
-        Implement this function by modifying the _print functions above.
-        '''
-
-    def preorder(self, start, traversal):
+    def __init__(self, xs=None):
         '''
         FIXME:
-        Implement this function by modifying the _print functions above.
+        Implement this function.
         '''
+        super().__init__(xs)
 
-    def inorder(self, start, traversal):
+    def balance_factor(self):
         '''
-        FIXME:
-        Implement this function by modifying the _print functions above.
+        Returns the balance factor of a tree.
         '''
-
-    def postorder(self, start, traversal):
-        '''
-        FIXME:
-        Implement this function by modifying the _print functions above.
-        '''
-
-    def __len__(self):
-        '''
-        Returns the number of elements contained in the tree.
-        Recall that `tree.__len__()` will desugar to `size(len)`.
-        '''
-        return BinaryTree.__len__helper(self.root)
+        return AVLTree._balance_factor(self.root)
 
     @staticmethod
-    def __len__helper(node):
+    def _balance_factor(node):
         '''
-        FIXME:
-        Implement this function.
-
-        HINT:
-        The pseudocode is:
-        add 1 for the current node;
-        if a left child exists, add the result of __len__helper on the left child;
-        if a right child exists, add the result of __len__helper on the right child;
-        return the sum of these three steps
+        Returns the balance factor of a node.
         '''
+        if node is None:
+            return 0
+        return BinaryTree._height(node.left) - BinaryTree._height(node.right)
 
-    def height(self):
+    def is_avl_satisfied(self):
         '''
-        Returns the height of the tree.
-        Recall that the height is the maximum length from the root to a leaf node.
-
-        FIXME:
-        Implement this function.
-
-        HINT:
-        See how the __len__ method calls its helper staticmethod.
+        Returns True if the avl tree satisfies that all nodes have a balance factor in [-1,0,1].
         '''
+        return AVLTree._is_avl_satisfied(self.root)
 
     @staticmethod
-    def _height(node):
+    def _is_avl_satisfied(node):
+        '''
+        FIXME:
+        Implement this function.
+        '''
+        if node is None:
+            return True
+        else:
+            return all([
+                AVLTree._balance_factor(node) in [-1, 0, 1],
+                AVLTree._is_avl_satisfied(node.left),
+                AVLTree._is_avl_satisfied(node.right),
+            ])
+
+    @staticmethod
+    def _left_rotate(node):
         '''
         FIXME:
         Implement this function.
 
-        HINT:
-        The pseudocode is:
-        if a left child exists, calculate the _height of the left child;
-        if a right child exists, calculate the _height of the right child;
-        return 1 (for the current node) plus the max of the left and right _heights calculated above
+        The lecture videos provide a high-level overview of tree rotations,
+        and the textbook provides full python code.
+        The textbook's class hierarchy for their AVL tree code is fairly different from our class hierarchy,
+        however, so you will have to adapt their code.
         '''
+        assert(node.right is not None)
+        root = Node(node.right.value)
+        root.right = node.right.right
+        root.left = Node(node.value)
+        root.left.left = node.left
+        root.left.right = node.right.left
+        return root
+
+    @staticmethod
+    def _right_rotate(node):
+        '''
+        FIXME:
+        Implement this function.
+
+        The lecture videos provide a high-level overview of tree rotations,
+        and the textbook provides full python code.
+        The textbook's class hierarchy for their AVL tree code is fairly different from our class hierarchy,
+        however, so you will have to adapt their code.
+        '''
+        assert(node.left is not None)
+        root = Node(node.left.value)
+        root.left = node.left.left
+        root.right = Node(node.value)
+        root.right.right = node.right
+        root.right.left = node.left.right
+        return root
+
+    def insert(self, value):
+        '''
+        FIXME:
+        Implement this function.
+
+        The lecture videos provide a high-level overview of how to insert into an AVL tree,
+        and the textbook provides full python code.
+        The textbook's class hierarchy for their AVL tree code is fairly different from our class hierarchy,
+        however, so you will have to adapt their code.
+
+        HINT:
+        It is okay to add @staticmethod helper functions for this code.
+        The code should look very similar to the code for your insert function for the BST,
+        but it will also call the left and right rebalancing functions.
+        '''
+        def go(node):
+            if value < node.value:
+                if node.left is None:
+                    node.left = Node(value)
+                else:
+                    node.left = go(node.left)
+            elif value > node.value:
+                if node.right is None:
+                    node.right = Node(value)
+                else:
+                    node.right = go(node.right)
+            node = AVLTree._rebalance(node)
+            return node
+
+        if self.root is None:
+            self.root = Node(value)
+        else:
+            self.root = go(self.root)
+
+    @staticmethod
+    def _rebalance(node):
+        '''
+        There are no test cases for the rebalance function,
+        so you do not technically have to implement it.
+        But both the insert function needs the rebalancing code,
+        so I recommend including that code here.
+        '''
+        balance_factor = AVLTree._balance_factor(node)
+        assert balance_factor in [-2, -1, 0, 1, 2]
+        if balance_factor < 0:
+            if AVLTree._balance_factor(node.right) > 0:
+                node.right = AVLTree._right_rotate(node.right)
+                node = AVLTree._left_rotate(node)
+            else:
+                node = AVLTree._left_rotate(node)
+        elif balance_factor > 0:
+            if AVLTree._balance_factor(node.left) < 0:
+                node.left = AVLTree._left_rotate(node.left)
+                node = AVLTree._right_rotate(node)
+            else:
+                node = AVLTree._right_rotate(node)
+        return node
