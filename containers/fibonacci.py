@@ -55,18 +55,35 @@ def fib(n):
 class Fib:
     '''
     This class represents all the fibonacci numbers,
-    but uses O(1) memory to do so.
-
+    but uses O(1) memory to do so
     >>> list(Fib(5))
     [1, 1, 2, 3, 5]
     '''
+    def __init__(self, n):
+        self.n = n
+
+    def __iter__(self):
+        return FibIter(self.n) 
 
 
 class FibIter:
     '''
     This is the iterator helper class for the Fib class.
     '''
+    def __init__(self, n = 1):
+        self.fibs = [1]
+        self.n = n
 
+    def __next__(self):
+        #if self.n is not None and self.n < 0
+        #    raise StopException
+        if len(self.fibs) < 2:
+            self.fibs.append(1)
+            return self.fibs
+        else:
+            self.fibs.append(self.fibs[-1] + self.fibs[-2])
+            self.n -= 1
+            return self.fibs
 
 def fib_yield(n=None):
     '''
