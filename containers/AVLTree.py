@@ -4,8 +4,8 @@ The functions in this file are considerably harder than the functions in the Bin
 but there are fewer of them.
 '''
 
-from containers.BinaryTree import BinaryTree, Node
-from containers.BST import BST
+from contain.BinaryTree import BinaryTree, Node
+from contain.BST import BST
 
 
 class AVLTree(BST):
